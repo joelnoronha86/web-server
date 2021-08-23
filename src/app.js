@@ -49,20 +49,20 @@ app.get('/weather', (req, res) => {
         })
     }
 
-    geocode(req.query.address, (error, { lat, long, location } = {}) => {
+    geocode(req.query.address, (error, { lat, long} = {}) => {
         if (error) {
             return res.send({ error })
         }
 
-        forecast(lat, long, (error, forecastData) => {
+        forecast(lat, long, (error, {WeatherDescription, Temp, Feelslike, City, Country}) => {
             if (error) {
                 return res.send({ error })
             }
 
             res.send({
-                forecast: forecastData,
-                location,
-                address: req.query.address
+                forecast: WeatherDescription +'. The current temperature is ' + Temp + ' degC and it feels like ' + Feelslike + ' degC.',
+                address: 'You searched for: '+ req.query.address,
+                location: City + ', ' + Country
             })
         })
     })
